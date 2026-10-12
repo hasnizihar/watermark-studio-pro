@@ -117,7 +117,7 @@
                             <input type="range" id="opacitySlider" class="form-range" min="0.1" max="1.0" step="0.05" value="1.0">
                         </div>
 
-                        <div class="custom-placement-box" id="customPlacementBox" style="display: none;">
+                        <div class="custom-placement-box" id="customPlacementBox">
                             <div class="form-row">
                                 <div class="form-field col-half">
                                     <label for="hAlignSelect">H-Align</label>
@@ -254,9 +254,9 @@
                                 <circle cx="11" cy="11" r="8"/>
                                 <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                             </svg>
-                            <input type="text" id="searchInput" class="search-input" placeholder="Search filenames...">
+                            <input type="text" id="searchInput" class="search-input" placeholder="Search filenames..." aria-label="Search filenames" title="Search filenames">
                         </div>
-                        <select id="sortSelect" class="sort-select">
+                        <select id="sortSelect" class="sort-select" title="Sort by" aria-label="Sort by">
                             <option value="name_asc">Name (A-Z)</option>
                             <option value="name_desc">Name (Z-A)</option>
                             <option value="orient">Orientation</option>
@@ -280,15 +280,15 @@
                     </div>
 
                     <!-- List View Container -->
-                    <div class="photo-list" id="photoList" style="display: none;">
+                    <div class="photo-list" id="photoList">
                         <table class="workspace-table" id="workspaceTable">
                             <thead>
                                 <tr>
-                                    <th style="width: 32px;"><input type="checkbox" id="selectAllCheckbox" checked></th>
-                                    <th style="width: 45px;">Thumb</th>
+                                    <th class="col-checkbox"><input type="checkbox" id="selectAllCheckbox" checked aria-label="Select all photos"></th>
+                                    <th class="col-thumb">Thumb</th>
                                     <th>Original Filename</th>
-                                    <th style="width: 110px;">Orientation</th>
-                                    <th style="width: 90px;">Dimensions</th>
+                                    <th class="col-orient">Orientation</th>
+                                    <th class="col-dim">Dimensions</th>
                                     <th>Target Output Filename</th>
                                 </tr>
                             </thead>
@@ -316,7 +316,7 @@
                         <p>Select a photo to preview watermark</p>
                     </div>
 
-                    <div class="slider-comparison" id="sliderComparison" style="display: none;">
+                    <div class="slider-comparison" id="sliderComparison">
                         <div class="comp-img-wrapper" id="compWrapper">
                             <img id="compImgOriginal" class="comp-img comp-orig" alt="Original">
                             <div class="comp-overlay-clip" id="compOverlayClip">
@@ -350,9 +350,9 @@
                         <span class="meta-value font-mono" id="metaResolution">—</span>
                     </div>
                     <div class="meta-row">
-                        <span class="meta-label">Orientation:</span>
+                        <label for="metaOrientationSelect" class="meta-label">Orientation:</label>
                         <div class="orientation-override-wrap">
-                            <select id="metaOrientationSelect" class="orient-select">
+                            <select id="metaOrientationSelect" class="orient-select" title="Orientation override" aria-label="Orientation override">
                                 <option value="portrait">Portrait</option>
                                 <option value="landscape">Landscape</option>
                                 <option value="square">Square</option>
@@ -380,9 +380,9 @@
                     </svg>
                     Process Batch
                 </button>
-                <button class="btn btn-subtle btn-sm" id="btnPauseBatch" style="display: none;">Pause</button>
-                <button class="btn btn-danger btn-sm" id="btnCancelBatch" style="display: none;">Cancel</button>
-                <button class="btn btn-outline btn-sm" id="btnOpenCompleted" style="display: none;">Open Output</button>
+                <button class="btn btn-subtle btn-sm" id="btnPauseBatch">Pause</button>
+                <button class="btn btn-danger btn-sm" id="btnCancelBatch">Cancel</button>
+                <button class="btn btn-outline btn-sm" id="btnOpenCompleted">Open Output</button>
             </div>
 
             <div class="job-bar-center">
@@ -392,7 +392,7 @@
                     <span class="job-percent-text" id="jobPercentText">0%</span>
                 </div>
                 <div class="job-progress-track">
-                    <div class="job-progress-fill" id="jobProgressFill" style="width: 0%;"></div>
+                    <div class="job-progress-fill" id="jobProgressFill"></div>
                 </div>
             </div>
 
@@ -408,7 +408,7 @@
         </footer>
 
         <!-- Collapsible Log Drawer -->
-        <div class="log-drawer" id="logDrawer" style="display: none;">
+        <div class="log-drawer" id="logDrawer">
             <div class="log-drawer-header">
                 <span>Batch Processing Log</span>
                 <button class="btn-close-log" id="btnCloseLog">×</button>

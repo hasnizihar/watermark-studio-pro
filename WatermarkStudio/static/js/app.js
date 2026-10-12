@@ -752,7 +752,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 12. Log Drawer Toggle
     btnToggleLogs.addEventListener('click', () => {
-        logDrawer.style.display = logDrawer.style.display === 'none' ? 'flex' : 'none';
+        const isClosed = window.getComputedStyle(logDrawer).display === 'none';
+        logDrawer.style.display = isClosed ? 'flex' : 'none';
     });
     btnCloseLog.addEventListener('click', () => {
         logDrawer.style.display = 'none';

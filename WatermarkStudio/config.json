@@ -10,7 +10,7 @@
   "naming_order": "portrait_first",
   "include_orientation_suffix": false,
   "preserve_original_name": false,
-  "placement_mode": "full_width_banner",
+  "placement_mode": "custom",
   "opacity": 1,
   "horizontal_align": "right",
   "vertical_align": "bottom",
