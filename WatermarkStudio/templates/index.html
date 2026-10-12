@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watermark Studio Pro V2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="studio-app">
+        <!-- Minimal Top Bar -->
+        <header class="app-topbar">
+            <div class="topbar-left">
+                <div class="app-logo">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="3"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                    <span class="app-title">Watermark Studio <span class="badge-v2">Pro v2</span></span>
+                </div>
+            </div>
+
+            <div class="topbar-center">
+                <div class="stats-ribbon" id="statsRibbon">
+                    <span class="ribbon-item"><strong><span id="statTotal">0</span></strong> Total</span>
+                    <span class="ribbon-sep">•</span>
+                    <span class="ribbon-item text-purple"><strong><span id="statPortrait">0</span></strong> Portrait</span>
+                    <span class="ribbon-sep">•</span>
+                    <span class="ribbon-item text-cyan"><strong><span id="statLandscape">0</span></strong> Landscape</span>
+                    <span class="ribbon-sep">•</span>
+                    <span class="ribbon-item text-amber"><strong><span id="statSquare">0</span></strong> Square</span>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <button class="btn btn-subtle btn-sm" id="btnOpenOutputTop" title="Open destination directory">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    Output Folder
+                </button>
+            </div>
+        </header>
+
+        <!-- Main 3-Column Studio Body -->
+        <div class="studio-body">
+            <!-- LEFT SIDEBAR: Controls & Settings -->
+            <aside class="studio-sidebar">
+                <div class="sidebar-scroll">
+                    <!-- Section: Directories -->
+                    <div class="panel-section">
+                        <div class="section-heading">Directories</div>
+                        
+                        <div class="form-field">
+                            <label for="inputDir">Source Gallery</label>
+                            <div class="input-btn-group">
+                                <input type="text" id="inputDir" class="form-input" placeholder="Path to images...">
+                                <button class="btn btn-browse" data-browse="dir" data-target="inputDir">Browse</button>
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="outputDir">Target Output</label>
+                            <div class="input-btn-group">
+                                <input type="text" id="outputDir" class="form-input" placeholder="Destination path...">
+                                <button class="btn btn-browse" data-browse="dir" data-target="outputDir">Browse</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section: Watermarks -->
+                    <div class="panel-section">
+                        <div class="section-heading">Watermark Assets</div>
+                        
+                        <div class="form-field">
+                            <label for="wmVertPath">Portrait (Vertical)</label>
+                            <div class="input-btn-group">
+                                <input type="text" id="wmVertPath" class="form-input" placeholder="Select portrait watermark PNG...">
+                                <button class="btn btn-browse" data-browse="file" data-target="wmVertPath">Browse</button>
+                            </div>
+                            <span class="field-hint">Auto-mapped to portrait images</span>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="wmHorizPath">Landscape (Horizontal)</label>
+                            <div class="input-btn-group">
+                                <input type="text" id="wmHorizPath" class="form-input" placeholder="Select landscape watermark PNG...">
+                                <button class="btn btn-browse" data-browse="file" data-target="wmHorizPath">Browse</button>
+                            </div>
+                            <span class="field-hint">Auto-mapped to landscape images</span>
+                        </div>
+                    </div>
+
+                    <!-- Section: Placement & Presets -->
+                    <div class="panel-section">
+                        <div class="section-heading">Watermark Placement</div>
+
+                        <div class="form-field">
+                            <label for="presetSelect">Preset</label>
+                            <select id="presetSelect" class="form-select">
+                                <option value="full_width_banner">Full-Width Bottom Banner (Default)</option>
+                                <option value="corner_watermark">Bottom-Right Corner Logo</option>
+                                <option value="centered">Centered Overlay</option>
+                                <option value="custom">Custom Settings</option>
+                            </select>
+                        </div>
+
+                        <div class="form-field">
+                            <div class="label-with-value">
+                                <label for="opacitySlider">Opacity</label>
+                                <span class="val-badge" id="opacityVal">100%</span>
+                            </div>
+                            <input type="range" id="opacitySlider" class="form-range" min="0.1" max="1.0" step="0.05" value="1.0">
+                        </div>
+
+                        <div class="custom-placement-box" id="customPlacementBox" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-field col-half">
+                                    <label for="hAlignSelect">H-Align</label>
+                                    <select id="hAlignSelect" class="form-select">
+                                        <option value="center">Center</option>
+                                        <option value="right" selected>Right</option>
+                                        <option value="left">Left</option>
+                                    </select>
+                                </div>
+                                <div class="form-field col-half">
+                                    <label for="vAlignSelect">V-Align</label>
+                                    <select id="vAlignSelect" class="form-select">
+                                        <option value="bottom" selected>Bottom</option>
+                                        <option value="center">Center</option>
+                                        <option value="top">Top</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="label-with-value">
+                                    <label for="scaleSlider">Scale</label>
+                                    <span class="val-badge" id="scaleVal">30%</span>
+                                </div>
+                                <input type="range" id="scaleSlider" class="form-range" min="0.05" max="1.0" step="0.05" value="0.30">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section: Naming & Export -->
+                    <div class="panel-section">
+                        <div class="section-heading">Sequencing & Naming</div>
+
+                        <div class="form-field">
+                            <label for="namingPrefix">Filename Prefix</label>
+                            <input type="text" id="namingPrefix" class="form-input font-mono" value="GGM_RECAS_KCC_P4_">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-field col-half">
+                                <label for="startIndex">Start #</label>
+                                <input type="number" id="startIndex" class="form-input font-mono" value="1" min="1">
+                            </div>
+                            <div class="form-field col-half">
+                                <label for="padDigits">Digits</label>
+                                <input type="number" id="padDigits" class="form-input font-mono" value="2" min="1" max="6">
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label>Sequencing Mode</label>
+                            <div class="segmented-control">
+                                <label class="seg-item">
+                                    <input type="radio" name="numberingMode" value="sequential_all" checked>
+                                    <span>Continuous (01..35)</span>
+                                </label>
+                                <label class="seg-item">
+                                    <input type="radio" name="numberingMode" value="separate_by_folder">
+                                    <span>Per Folder (01..20)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="outputStructure">Folder Structure</label>
+                            <select id="outputStructure" class="form-select">
+                                <option value="folders">Group in Portrait/ & Landscape/ folders</option>
+                                <option value="single">Single output folder</option>
+                                <option value="folders_with_square">Portrait/, Landscape/ & Square/ folders</option>
+                            </select>
+                        </div>
+
+                        <div class="form-field">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="overwriteExisting">
+                                <span>Overwrite existing files in output</span>
+                            </label>
+                        </div>
+
+                        <div class="naming-sample-pill">
+                            <span class="sample-label">Sample:</span>
+                            <code id="namingPreview">GGM_RECAS_KCC_P4_01.jpg</code>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Footer Actions -->
+                <div class="sidebar-footer">
+                    <button class="btn btn-secondary btn-block" id="btnScan">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        Scan / Refresh Gallery
+                    </button>
+                </div>
+            </aside>
+
+            <!-- CENTER WORKSPACE: Photo Grid & Table -->
+            <main class="studio-workspace">
+                <!-- Workspace Toolbar -->
+                <div class="workspace-toolbar">
+                    <div class="toolbar-left">
+                        <div class="view-toggle">
+                            <button class="view-btn active" id="btnViewGrid" title="Grid View">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="7" height="7"/>
+                                    <rect x="14" y="3" width="7" height="7"/>
+                                    <rect x="14" y="14" width="7" height="7"/>
+                                    <rect x="3" y="14" width="7" height="7"/>
+                                </svg>
+                            </button>
+                            <button class="view-btn" id="btnViewList" title="List View">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="8" y1="6" x2="21" y2="6"/>
+                                    <line x1="8" y1="12" x2="21" y2="12"/>
+                                    <line x1="8" y1="18" x2="21" y2="18"/>
+                                    <line x1="3" y1="6" x2="3.01" y2="6"/>
+                                    <line x1="3" y1="12" x2="3.01" y2="12"/>
+                                    <line x1="3" y1="18" x2="3.01" y2="18"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="filter-pills" id="filterPills">
+                            <button class="pill active" data-filter="all">All (<span id="pillCountAll">0</span>)</button>
+                            <button class="pill" data-filter="portrait">Portrait (<span id="pillCountPortrait">0</span>)</button>
+                            <button class="pill" data-filter="landscape">Landscape (<span id="pillCountLandscape">0</span>)</button>
+                        </div>
+                    </div>
+
+                    <div class="toolbar-right">
+                        <div class="search-input-wrapper">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                            <input type="text" id="searchInput" class="search-input" placeholder="Search filenames...">
+                        </div>
+                        <select id="sortSelect" class="sort-select">
+                            <option value="name_asc">Name (A-Z)</option>
+                            <option value="name_desc">Name (Z-A)</option>
+                            <option value="orient">Orientation</option>
+                            <option value="size">Size</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Photos Container -->
+                <div class="workspace-scroll-area">
+                    <!-- Grid View Container -->
+                    <div class="photo-grid" id="photoGrid">
+                        <div class="empty-placeholder" id="gridEmptyPlaceholder">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <polyline points="21 15 16 10 5 21"/>
+                            </svg>
+                            <p>No photos scanned. Click <strong>Scan Gallery</strong> to import photos.</p>
+                        </div>
+                    </div>
+
+                    <!-- List View Container -->
+                    <div class="photo-list" id="photoList" style="display: none;">
+                        <table class="workspace-table" id="workspaceTable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 32px;"><input type="checkbox" id="selectAllCheckbox" checked></th>
+                                    <th style="width: 45px;">Thumb</th>
+                                    <th>Original Filename</th>
+                                    <th style="width: 110px;">Orientation</th>
+                                    <th style="width: 90px;">Dimensions</th>
+                                    <th>Target Output Filename</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+
+            <!-- RIGHT PANEL: Live Before/After Preview & Zoom -->
+            <aside class="studio-preview-panel">
+                <div class="preview-panel-header">
+                    <span class="preview-heading">Inspector & Preview</span>
+                    <div class="zoom-controls">
+                        <button class="zoom-btn" id="btnZoomOut" title="Zoom Out">−</button>
+                        <span class="zoom-level" id="zoomLevelText">Fit</span>
+                        <button class="zoom-btn" id="btnZoomIn" title="Zoom In">+</button>
+                        <button class="zoom-btn" id="btnZoomFit" title="Fit Window">Fit</button>
+                    </div>
+                </div>
+
+                <!-- Image Stage -->
+                <div class="preview-stage" id="previewStage">
+                    <div class="preview-empty-box" id="previewEmptyBox">
+                        <p>Select a photo to preview watermark</p>
+                    </div>
+
+                    <div class="slider-comparison" id="sliderComparison" style="display: none;">
+                        <div class="comp-img-wrapper" id="compWrapper">
+                            <img id="compImgOriginal" class="comp-img comp-orig" alt="Original">
+                            <div class="comp-overlay-clip" id="compOverlayClip">
+                                <img id="compImgWatermarked" class="comp-img comp-wm" alt="Watermarked">
+                            </div>
+                            <div class="slider-handle" id="sliderHandle">
+                                <div class="slider-line"></div>
+                                <div class="slider-knob">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                        <polygon points="8,12 14,6 14,18"/>
+                                    </svg>
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                        <polygon points="16,12 10,6 10,18"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <span class="comp-badge badge-orig">Original</span>
+                            <span class="comp-badge badge-wm">Watermarked</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inspector Metadata Card -->
+                <div class="preview-meta-card" id="previewMetaCard">
+                    <div class="meta-row">
+                        <span class="meta-label">Selected:</span>
+                        <strong class="meta-value truncate" id="metaFilename">—</strong>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Resolution:</span>
+                        <span class="meta-value font-mono" id="metaResolution">—</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Orientation:</span>
+                        <div class="orientation-override-wrap">
+                            <select id="metaOrientationSelect" class="orient-select">
+                                <option value="portrait">Portrait</option>
+                                <option value="landscape">Landscape</option>
+                                <option value="square">Square</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Watermark:</span>
+                        <span class="meta-value font-mono" id="metaWatermark">—</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Export Name:</span>
+                        <code class="meta-value font-mono code-tag" id="metaExportName">—</code>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- BOTTOM JOB PANEL: Execution & Progress -->
+        <footer class="app-bottom-panel">
+            <div class="job-bar-left">
+                <button class="btn btn-primary btn-run" id="btnStartBatch" disabled>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                    Process Batch
+                </button>
+                <button class="btn btn-subtle btn-sm" id="btnPauseBatch" style="display: none;">Pause</button>
+                <button class="btn btn-danger btn-sm" id="btnCancelBatch" style="display: none;">Cancel</button>
+                <button class="btn btn-outline btn-sm" id="btnOpenCompleted" style="display: none;">Open Output</button>
+            </div>
+
+            <div class="job-bar-center">
+                <div class="progress-info-row">
+                    <span class="job-status-text" id="jobStatusText">Ready for batch</span>
+                    <span class="job-count-text" id="jobCountText">0 / 0</span>
+                    <span class="job-percent-text" id="jobPercentText">0%</span>
+                </div>
+                <div class="job-progress-track">
+                    <div class="job-progress-fill" id="jobProgressFill" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <div class="job-bar-right">
+                <button class="btn btn-subtle btn-sm" id="btnToggleLogs">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="4 17 10 11 4 5"/>
+                        <line x1="12" y1="19" x2="20" y2="19"/>
+                    </svg>
+                    Logs
+                </button>
+            </div>
+        </footer>
+
+        <!-- Collapsible Log Drawer -->
+        <div class="log-drawer" id="logDrawer" style="display: none;">
+            <div class="log-drawer-header">
+                <span>Batch Processing Log</span>
+                <button class="btn-close-log" id="btnCloseLog">×</button>
+            </div>
+            <div class="log-drawer-body" id="logTerminal"></div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
