@@ -35,3 +35,7 @@ wheels/
 *.sublime-workspace
 .DS_Store
 Thumbs.db
+
+# User Photo Galleries (Do not commit to GitHub)
+Gallery/
+Watermarked Gallery/
